@@ -12,7 +12,10 @@ set(BOX2D_BUILD_EXAMPLES OFF)
 set(BOX2D_BUILD_UNITTESTS OFF)
 cmake_policy(SET CMP0077 NEW)
 add_subdirectory(3rd-party/liquidfun)
-target_include_directories(Box2D PUBLIC 3rd-party/liquidfun/Box2D)
+target_include_directories(Box2D PUBLIC 3rd-party/liquidfun)
 
-add_executable(oop_final_game main.cpp window.cpp)
-target_link_libraries(oop_final_game Box2D SDL2-static)
+# Boost Geometry
+find_package(Boost REQUIRED)
+
+add_executable(oop_final_game main.cpp window.cpp level.cpp engine.cpp)
+target_link_libraries(oop_final_game Box2D SDL2-static Boost::boost)
