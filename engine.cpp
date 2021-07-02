@@ -13,7 +13,7 @@ using Polygon = bg::model::polygon<Point>;
 
 Engine::Engine( Level *level ) : level( level ), world( b2Vec2( 0, -9.8f ) ), rocks(), soil(), facilities(), particle_system( nullptr ), water_groups(), removed_soil( 0 )
 {
-	auto rock_shapes = std::move( createB2ShapesFromBitmap( level->rock_map ) );
+	rock_shapes = std::move( createB2ShapesFromBitmap( level->rock_map ) );
 	for ( const auto &rock_shape : rock_shapes ) {
 		b2BodyDef bd;
 		auto body = world.CreateBody( &bd );
@@ -21,7 +21,7 @@ Engine::Engine( Level *level ) : level( level ), world( b2Vec2( 0, -9.8f ) ), ro
 		rocks.push_back( body );
 	}
 
-	auto soil_shapes = std::move( createB2ShapesFromBitmap( level->soil_map ) );
+	soil_shapes = std::move( createB2ShapesFromBitmap( level->soil_map ) );
 	for ( const auto &soil_shape : soil_shapes ) {
 		b2BodyDef bd;
 		auto body = world.CreateBody( &bd );
@@ -32,7 +32,7 @@ Engine::Engine( Level *level ) : level( level ), world( b2Vec2( 0, -9.8f ) ), ro
 	// TODO: Handle facilities
 
 	b2ParticleSystemDef psd;
-	psd.radius = 0.05f;
+	psd.radius = 0.025f;
 	psd.destroyByAge = false;
 	particle_system = world.CreateParticleSystem( &psd );
 
@@ -141,13 +141,14 @@ void Engine::stepping()
 			world.DestroyBody( old_body );
 		}
 		soil.clear();
-		auto soil_shapes = std::move( createB2ShapesFromBitmap( level->soil_map ) );
+		soil_shapes = std::move( createB2ShapesFromBitmap( level->soil_map ) );
 		for ( const auto &soil_shape : soil_shapes ) {
 			b2BodyDef bd;
 			auto body = world.CreateBody( &bd );
 			body->CreateFixture( &soil_shape, 0.1f );
 			soil.push_back( body );
 		}
+		removed_soil = 0;
 	}
 
 	world.Step( time_step, velocity_iteration, position_iteration, particle_iteration );

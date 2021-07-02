@@ -23,16 +23,18 @@ void checkSDLError( bool ok, const std::string &error_msg )
 void Window::renderPass()
 {
 	while ( !quit ) {
-		while ( SDL_PollEvent( event ) ) {
-			auto it = event_handlers.find( event->type );
+		while ( SDL_PollEvent( &event ) ) {
+			auto it = event_handlers.find( event.type );
 			if ( it != event_handlers.end() ) {
-				( it->second )( event );
+				( it->second )( &event );
 			}
-			if ( event->type == SDL_QUIT ) {
+			if ( event.type == SDL_QUIT ) {
 				quit = true;
 			}
 		}
+		SDL_RenderClear( renderer );
 		render();
+		SDL_RenderPresent( renderer );
 	}
 }
 Window::Window( int width, int height )
@@ -40,14 +42,19 @@ Window::Window( int width, int height )
 	checkSDLError( SDL_Init( SDL_INIT_VIDEO ), "SDL Init Failed" );
 	window = SDL_CreateWindow( "The Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN );
 	checkSDLError( window, "Window Init Failed" );
-	screen = SDL_GetWindowSurface( window );
+	renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+	checkSDLError( renderer, "Renderer Creation Failed" );
+
 	render_thread = std::thread( &Window::renderPass, this );
 }
 Window::~Window()
 {
 	quit = true;
 	render_thread.join();
+	SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
+	renderer = nullptr;
+	window = nullptr;
 	SDL_Quit();
 }
 void Window::setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event *const )> handler )

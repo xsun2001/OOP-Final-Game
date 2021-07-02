@@ -1,4 +1,5 @@
 #include "level.h"
+#include <cmath>
 
 void splitUint32( uint32_t a, uint16_t &b1, uint16_t &b2 )
 {
@@ -49,6 +50,28 @@ Level *loadLevel( const std::string &path )
 		level->reservoirs.push_back( r );
 	}
 
+	return level;
+}
+
+Level *demoLevel()
+{
+	auto *level = new Level;
+	level->soil_map.clear();
+	level->rock_map.clear();
+	for ( int i = 0; i < LEVEL_WIDTH; ++i ) {
+		int maxj = int( pow( i - 320.0, 2 ) / 300.0 + 300.0 );
+		for ( int j = 0; j <= maxj; j++ ) {
+			level->soil_map.set( i, j );
+		}
+	}
+	for ( int i = 0; i < 20; ++i ) {
+		for ( int j = 0; j < LEVEL_HEIGHT; ++j ) {
+			level->rock_map.set( i, j );
+			level->rock_map.set( LEVEL_WIDTH - i - 1, j );
+		}
+	}
+	level->reservoirs.push_back( { 320, 900, 100, 100 } );
+	level->facilities.push_back( { DESTINATION, 320, 100, 90 } );
 	return level;
 }
 

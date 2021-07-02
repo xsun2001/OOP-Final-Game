@@ -11,10 +11,10 @@ void checkSDLError( bool ok, const std::string &error_msg );
 
 class Window
 {
+protected:
 	SDL_Window *window = nullptr;
 	SDL_Renderer *renderer = nullptr;
-	SDL_Surface *screen = nullptr;
-	SDL_Event *event = nullptr;
+	SDL_Event event{};
 	std::map<Uint32, std::function<void( SDL_Event *const )>> event_handlers;
 	volatile bool quit = false;
 	std::thread render_thread;

@@ -1,10 +1,10 @@
 #include "engine.h"
+#include "game.h"
 #include "window.h"
 #include <iostream>
 
 int main()
 {
-	std::cout << "Hello, World!" << std::endl;
-	Window w( 500, 500 );
+	Game g;
 	return 0;
 }

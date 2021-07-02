@@ -1,3 +1,4 @@
+#pragma once
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -39,3 +40,5 @@ struct Level {
 };
 
 Level *loadLevel( const std::string &path );
+
+Level *demoLevel();
