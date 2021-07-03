@@ -3,6 +3,14 @@
 
 Game::Game() : Window( LEVEL_WIDTH, LEVEL_HEIGHT ), engine( demoLevel() )
 {
+	auto mouse_handler = [&]( SDL_Event *event ) {
+		int x, y;
+		if ( SDL_GetMouseState( &x, &y ) & SDL_BUTTON( SDL_BUTTON_LEFT ) ) {
+			engine.tryExcavate( x, LEVEL_HEIGHT - y );
+		}
+	};
+	setEventHandler( SDL_MOUSEMOTION, mouse_handler );
+	setEventHandler( SDL_MOUSEBUTTONDOWN, mouse_handler );
 }
 void renderPolygon( SDL_Renderer *renderer, b2ChainShape *polygon, Uint8 r, Uint8 g, Uint8 b, Uint8 a )
 {
@@ -29,6 +37,16 @@ void Game::render()
 	for ( int i = 0; i < engine.particle_system->GetParticleCount(); ++i ) {
 		const auto &particle = engine.particle_system->GetPositionBuffer()[i];
 		filledCircleRGBA( renderer, particle.x / PHYSICAL_RATIO, LEVEL_HEIGHT - particle.y / PHYSICAL_RATIO, 4, 0, 0, 0xFF, 0xFF );
+	}
+	for ( const auto &facility : engine.level->facilities ) {
+		if ( facility.type == DESTINATION ) {
+			auto green = 0xFF * engine.water_transported / engine.water_requested;
+			filledCircleRGBA( renderer, facility.x, LEVEL_HEIGHT - facility.y, 20, 0xFF - green, green, 0, 0xFF );
+		}
+	}
+
+	if ( engine.passed ) {
+
 	}
 }
 void Game::start()

@@ -24,7 +24,7 @@ protected:
 public:
 	Window( int width, int height );
 	~Window();
-	void setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event *const )> handler );
+	void setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event * )> handler );
 	virtual void render() = 0;
 	void show();
 };

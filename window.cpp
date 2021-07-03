@@ -33,7 +33,7 @@ void Window::renderLoop()
 				quit = true;
 			}
 		}
-		SDL_SetRenderDrawColor( renderer, 0xFF,0xFF,0xFF,0xFF );
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear( renderer );
 		render();
 		SDL_RenderPresent( renderer );
@@ -57,7 +57,7 @@ Window::~Window()
 	window = nullptr;
 	SDL_Quit();
 }
-void Window::setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event *const )> handler )
+void Window::setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event * )> handler )
 {
 	event_handlers[event_type] = std::move( handler );
 }

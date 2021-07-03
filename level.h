@@ -23,7 +23,6 @@ struct Bitmap {
 enum FacilityType : uint16_t
 {
 	DESTINATION,
-	FAUCET,
 };
 
 struct Facility {
