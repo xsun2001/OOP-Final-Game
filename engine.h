@@ -4,8 +4,6 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2World.h>
 
-const static float32 PHYSICAL_WIDTH = 32;
-const static float32 PHYSICAL_HEIGHT = 48;
 const static float32 PHYSICAL_RATIO = 0.05;
 const static uint32_t REBUILD_THRESHOLD = 200;
 const static uint16_t DIG_RADIUS = 64;

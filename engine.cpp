@@ -25,7 +25,7 @@ Engine::Engine( Level *level ) : level( level ), world( b2Vec2( 0, -9.8f ) ), ro
 	// TODO: Handle facilities
 
 	b2ParticleSystemDef psd;
-	psd.radius = 0.1f;
+	psd.radius = 0.15f;
 	psd.destroyByAge = false;
 	particle_system = world.CreateParticleSystem( &psd );
 
