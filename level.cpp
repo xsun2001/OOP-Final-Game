@@ -59,8 +59,8 @@ Level *demoLevel()
 	level->soil_map.clear();
 	level->rock_map.clear();
 	for ( int i = 0; i < LEVEL_WIDTH; ++i ) {
-		int maxj = int( pow( i - 320.0, 2 ) / 300.0 + 300.0 );
-		for ( int j = 0; j <= maxj; j++ ) {
+		int maxj = std::min( uint32_t( pow( i - 320.0, 2 ) / 300.0 + 500.0 ), LEVEL_HEIGHT );
+		for ( int j = 0; j < maxj; ++j ) {
 			level->soil_map.set( i, j );
 		}
 	}
@@ -70,27 +70,43 @@ Level *demoLevel()
 			level->rock_map.set( LEVEL_WIDTH - i - 1, j );
 		}
 	}
-	level->reservoirs.push_back( { 320, 900, 100, 100 } );
+	level->reservoirs.push_back( { 320, 900, 400, 100 } );
 	level->facilities.push_back( { DESTINATION, 320, 100, 90 } );
 	return level;
 }
 
 bool Bitmap::test( uint32_t x, uint32_t y )
 {
-	uint32_t x1 = x & 0b1111, x2 = x >> 4;
+	uint32_t x1 = x & 0b11111, x2 = x >> 5;
 	return ( storage[y][x2] & ( 1 << x1 ) ) != 0;
 }
 void Bitmap::set( uint32_t x, uint32_t y )
 {
-	uint32_t x1 = x & 0b1111, x2 = x >> 4;
+	uint32_t x1 = x & 0b11111, x2 = x >> 5;
 	storage[y][x2] |= ( 1 << x1 );
 }
 void Bitmap::unset( uint32_t x, uint32_t y )
 {
-	uint32_t x1 = x & 0b1111, x2 = x >> 4;
+	uint32_t x1 = x & 0b11111, x2 = x >> 5;
 	storage[y][x2] &= ~( 1 << x1 );
 }
 void Bitmap::clear()
 {
 	memset( storage, 0, sizeof( storage ) );
+}
+std::optional<std::tuple<int, int>> Bitmap::find()
+{
+	for ( int i = 0; i < LEVEL_HEIGHT; ++i ) {
+		for ( int j = 0; j < ( LEVEL_WIDTH >> 5 ); ++j ) {
+			auto n = storage[i][j];
+			if ( n != 0 ) {
+				for ( int k = 0; k < 32; ++k ) {
+					if ( n & ( 1 << k ) ) {
+						return { { ( j << 5 ) | k, i } };
+					}
+				}
+			}
+		}
+	}
+	return std::nullopt;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL.h"
+#include <SDL2_framerate.h>
 #include <cstdio>
 #include <map>
 #include <string>
@@ -17,12 +18,13 @@ protected:
 	SDL_Event event{};
 	std::map<Uint32, std::function<void( SDL_Event *const )>> event_handlers;
 	volatile bool quit = false;
-	std::thread render_thread;
-	void renderPass();
+	FPSmanager fps_manager{};
+	void renderLoop();
 
 public:
 	Window( int width, int height );
 	~Window();
 	void setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event *const )> handler );
 	virtual void render() = 0;
+	void show();
 };

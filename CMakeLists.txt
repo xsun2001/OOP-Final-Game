@@ -14,13 +14,13 @@ target_link_libraries(SDL2-gfx SDL2-static)
 target_include_directories(SDL2-gfx PUBLIC 3rd-party/SDL2_gfx)
 
 # liquidfun
+cmake_policy(SET CMP0077 NEW)
 set(BOX2D_BUILD_EXAMPLES OFF)
 set(BOX2D_BUILD_UNITTESTS OFF)
-cmake_policy(SET CMP0077 NEW)
 add_subdirectory(3rd-party/liquidfun)
 target_include_directories(Box2D PUBLIC 3rd-party/liquidfun)
 
-# Boost Geometry
+# CGAL
 find_package(Boost REQUIRED)
 
 add_executable(oop_final_game
@@ -28,5 +28,6 @@ add_executable(oop_final_game
         window.cpp
         level.cpp
         engine.cpp
-        game.cpp)
-target_link_libraries(oop_final_game Box2D SDL2-static SDL2-gfx Boost::boost)
+        game.cpp
+        generate_polygon.cpp)
+target_link_libraries(oop_final_game Box2D SDL2-static SDL2-gfx Boost::headers)

@@ -1,4 +1,5 @@
 #include "window.h"
+#include <iostream>
 #include <utility>
 
 void checkSDLError( void *pointer, const std::string &error_msg )
@@ -20,7 +21,7 @@ void checkSDLError( bool ok, const std::string &error_msg )
 	}
 }
 
-void Window::renderPass()
+void Window::renderLoop()
 {
 	while ( !quit ) {
 		while ( SDL_PollEvent( &event ) ) {
@@ -32,6 +33,7 @@ void Window::renderPass()
 				quit = true;
 			}
 		}
+		SDL_SetRenderDrawColor( renderer, 0xFF,0xFF,0xFF,0xFF );
 		SDL_RenderClear( renderer );
 		render();
 		SDL_RenderPresent( renderer );
@@ -40,17 +42,15 @@ void Window::renderPass()
 Window::Window( int width, int height )
 {
 	checkSDLError( SDL_Init( SDL_INIT_VIDEO ), "SDL Init Failed" );
-	window = SDL_CreateWindow( "The Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN );
+	window = SDL_CreateWindow( "The Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0 );
 	checkSDLError( window, "Window Init Failed" );
 	renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
 	checkSDLError( renderer, "Renderer Creation Failed" );
-
-	render_thread = std::thread( &Window::renderPass, this );
+	SDL_initFramerate( &fps_manager );
 }
 Window::~Window()
 {
 	quit = true;
-	render_thread.join();
 	SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
 	renderer = nullptr;
@@ -60,4 +60,9 @@ Window::~Window()
 void Window::setEventHandler( SDL_EventType event_type, std::function<void( SDL_Event *const )> handler )
 {
 	event_handlers[event_type] = std::move( handler );
+}
+void Window::show()
+{
+	SDL_ShowWindow( window );
+	renderLoop();
 }

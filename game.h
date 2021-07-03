@@ -9,4 +9,5 @@ class Game : public Window
 public:
 	Game();
 	void render() override;
+	void start();
 };
