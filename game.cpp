@@ -28,10 +28,10 @@ void Game::render()
 	engine.stepping();
 
 	for ( const auto &soil : engine.soil_shapes ) {
-		renderPolygon( renderer, soil, 0xFF, 0xFF, 0, 0xFF );
+		renderPolygon( renderer, soil, 0xA8, 0x7E, 0x1D, 0xFF );
 	}
 	for ( const auto &rock : engine.rock_shapes ) {
-		renderPolygon( renderer, rock, 0xFF, 0, 0, 0xFF );
+		renderPolygon( renderer, rock, 0x40, 0x14, 0x4F, 0xFF );
 	}
 	filledCircleColor( renderer, LEVEL_WIDTH / 2, LEVEL_HEIGHT / 2, 100, 0x000000FF );
 	for ( int i = 0; i < engine.particle_system->GetParticleCount(); ++i ) {
@@ -46,7 +46,6 @@ void Game::render()
 	}
 
 	if ( engine.passed ) {
-
 	}
 }
 void Game::start()

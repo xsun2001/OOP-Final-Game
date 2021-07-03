@@ -64,10 +64,25 @@ Level *demoLevel()
 			level->soil_map.set( i, j );
 		}
 	}
-	for ( int i = 0; i < 20; ++i ) {
-		for ( int j = 0; j < LEVEL_HEIGHT; ++j ) {
+	for ( int j = 0; j < LEVEL_HEIGHT; ++j ) {
+		for ( int i = 0; i < 20; ++i ) {
 			level->rock_map.set( i, j );
 			level->rock_map.set( LEVEL_WIDTH - i - 1, j );
+		}
+	}
+	for ( int j = 0; j < 20; ++j ) {
+		for ( int i = 0; i < LEVEL_WIDTH; ++i ) {
+			level->rock_map.set( i, j );
+		}
+	}
+	for ( int j = 190; j < 210; ++j ) {
+		for ( int i = 0; i < LEVEL_WIDTH * 0.6; ++i ) {
+			level->rock_map.set( i, j );
+		}
+	}
+	for ( int j = 390; j < 410; ++j ) {
+		for ( int i = LEVEL_WIDTH * 0.4; i < LEVEL_WIDTH; ++i ) {
+			level->rock_map.set( i, j );
 		}
 	}
 	level->reservoirs.push_back( { 320, 900, 400, 100 } );
